@@ -12,18 +12,18 @@ public class Deadlock {
             synchronized (lock1) {
                 System.out.println("T1 acquired lock1, waiting for lock2...");
                 try { Thread.sleep(100); } catch (InterruptedException e) {}
-                // synchronized (lock2) {           // blocked — T2 holds lock2
-                //     System.out.println("T1 done");
-                // }
+                synchronized (lock2) {           // blocked — T2 holds lock2
+                    System.out.println("T1 done");
+                }
             }
         });
 
         Thread t2 = new Thread(() -> {
             synchronized (lock2) {
                 System.out.println("T2 acquired lock2, waiting for lock1...");
-                // synchronized (lock1) {           // blocked — T1 holds lock1
-                //     System.out.println("T2 done");
-                // }
+                synchronized (lock1) {           // blocked — T1 holds lock1
+                    System.out.println("T2 done");
+                }
             }
         });
 
